@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="reseller_commission_tier_view_list" model="ir.ui.view">
+        <field name="name">reseller.commission.tier.list</field>
+        <field name="model">reseller.commission.tier</field>
+        <field name="arch" type="xml">
+            <list string="Commission Tiers" editable="bottom">
+                <field name="name"/>
+                <field name="min_amount"/>
+                <field name="rate"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="currency_id" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="reseller_commission_tier_action" model="ir.actions.act_window">
+        <field name="name">Commission Tiers</field>
+        <field name="res_model">reseller.commission.tier</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Define the commission tiers</p>
+            <p>A reseller earns the rate of the highest tier whose lower bound does not exceed their monthly net sales.</p>
+        </field>
+    </record>
+</odoo>

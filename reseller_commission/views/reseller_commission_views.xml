@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="reseller_commission_view_list" model="ir.ui.view">
+        <field name="name">reseller.commission.list</field>
+        <field name="model">reseller.commission</field>
+        <field name="arch" type="xml">
+            <list string="Reseller Commissions"
+                  decoration-muted="state == 'draft'"
+                  decoration-info="state == 'confirmed'"
+                  decoration-success="state == 'paid'">
+                <field name="name"/>
+                <field name="reseller_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="total_sales" sum="Total Sales"/>
+                <field name="rate"/>
+                <field name="commission_amount" sum="Total Commission"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'paid'" decoration-info="state == 'confirmed'"/>
+                <field name="currency_id" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="reseller_commission_view_form" model="ir.ui.view">
+        <field name="name">reseller.commission.form</field>
+        <field name="model">reseller.commission</field>
+        <field name="arch" type="xml">
+            <form string="Reseller Commission">
+                <header>
+                    <button name="action_recompute" type="object" string="Recompute"
+                            invisible="state != 'draft'"
+                            groups="reseller_commission.group_commission_manager"/>
+                    <button name="action_confirm" type="object" string="Confirm" class="oe_highlight"
+                            invisible="state != 'draft'"
+                            groups="reseller_commission.group_commission_manager"/>
+                    <button name="action_mark_paid" type="object" string="Mark as Paid" class="oe_highlight"
+                            invisible="state != 'confirmed'"
+                            groups="reseller_commission.group_commission_accountant"/>
+                    <button name="action_reset_to_draft" type="object" string="Reset to Draft"
+                            invisible="state != 'confirmed'"
+                            groups="reseller_commission.group_commission_manager"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,paid"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Period">
+                            <field name="reseller_id" readonly="state != 'draft'"/>
+                            <field name="date_from" readonly="state != 'draft'"/>
+                            <field name="date_to"/>
+                            <field name="payment_due_date"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                        <group string="Commission">
+                            <field name="total_sales"/>
+                            <field name="tier_id"/>
+                            <field name="rate"/>
+                            <field name="commission_amount"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="lines" string="Source Documents">
+                            <field name="line_ids" readonly="1">
+                                <list>
+                                    <field name="move_id"/>
+                                    <field name="move_type"/>
+                                    <field name="invoice_date"/>
+                                    <field name="invoice_origin"/>
+                                    <field name="amount" sum="Total"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="audit" string="Approval &amp; Payment">
+                            <group>
+                                <group>
+                                    <field name="confirmed_by_id"/>
+                                    <field name="confirmed_date"/>
+                                </group>
+                                <group>
+                                    <field name="paid_by_id"/>
+                                    <field name="paid_date"/>
+                                </group>
+                            </group>
+                            <field name="note" placeholder="Internal note..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="reseller_commission_view_search" model="ir.ui.view">
+        <field name="name">reseller.commission.search</field>
+        <field name="model">reseller.commission</field>
+        <field name="arch" type="xml">
+            <search string="Reseller Commissions">
+                <field name="name"/>
+                <field name="reseller_id"/>
+                <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="confirmed" string="Confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <filter name="paid" string="Paid" domain="[('state', '=', 'paid')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_reseller" string="Reseller" context="{'group_by': 'reseller_id'}"/>
+                    <filter name="group_period" string="Period" context="{'group_by': 'date_from:month'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="reseller_commission_view_pivot" model="ir.ui.view">
+        <field name="name">reseller.commission.pivot</field>
+        <field name="model">reseller.commission</field>
+        <field name="arch" type="xml">
+            <pivot string="Commission Summary" sample="1">
+                <field name="reseller_id" type="row"/>
+                <field name="date_from" interval="month" type="col"/>
+                <field name="total_sales" type="measure"/>
+                <field name="commission_amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="reseller_commission_view_graph" model="ir.ui.view">
+        <field name="name">reseller.commission.graph</field>
+        <field name="model">reseller.commission</field>
+        <field name="arch" type="xml">
+            <graph string="Commission Summary" type="bar" sample="1">
+                <field name="date_from" interval="month"/>
+                <field name="reseller_id"/>
+                <field name="commission_amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="reseller_commission_action" model="ir.actions.act_window">
+        <field name="name">Commissions</field>
+        <field name="res_model">reseller.commission</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="reseller_commission_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No commission yet</p>
+            <p>Commissions are generated every month from the posted invoices of your resellers.</p>
+        </field>
+    </record>
+
+    <record id="reseller_commission_analysis_action" model="ir.actions.act_window">
+        <field name="name">Commission Summary</field>
+        <field name="res_model">reseller.commission</field>
+        <field name="view_mode">pivot,graph,list,form</field>
+        <field name="search_view_id" ref="reseller_commission_view_search"/>
+    </record>
+</odoo>

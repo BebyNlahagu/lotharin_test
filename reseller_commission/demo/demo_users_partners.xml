@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Users (password = login). One per role of the access matrix. -->
+    <record id="user_sales_andi" model="res.users">
+        <field name="name">Andi (Salesperson)</field>
+        <field name="login">sales_andi</field>
+        <field name="password">sales_andi</field>
+        <field name="email">andi@example.com</field>
+        <field name="groups_id" eval="[(6, 0, [ref('reseller_commission.group_commission_user')])]"/>
+    </record>
+    <record id="user_sales_budi" model="res.users">
+        <field name="name">Budi (Salesperson)</field>
+        <field name="login">sales_budi</field>
+        <field name="password">sales_budi</field>
+        <field name="email">budi@example.com</field>
+        <field name="groups_id" eval="[(6, 0, [ref('reseller_commission.group_commission_user')])]"/>
+    </record>
+    <record id="user_commission_manager" model="res.users">
+        <field name="name">Citra (Commission Manager)</field>
+        <field name="login">cm_manager</field>
+        <field name="password">cm_manager</field>
+        <field name="email">citra@example.com</field>
+        <field name="groups_id" eval="[(6, 0, [ref('reseller_commission.group_commission_manager')])]"/>
+    </record>
+    <record id="user_commission_accountant" model="res.users">
+        <field name="name">Dewi (Accounting)</field>
+        <field name="login">cm_accounting</field>
+        <field name="password">cm_accounting</field>
+        <field name="email">dewi@example.com</field>
+        <field name="groups_id" eval="[(6, 0, [ref('reseller_commission.group_commission_accountant')])]"/>
+    </record>
+
+    <!-- Resellers and one ordinary customer -->
+    <record id="partner_reseller_andalas" model="res.partner">
+        <field name="name">Toko Mebel Andalas</field>
+        <field name="is_company" eval="True"/>
+        <field name="is_reseller" eval="True"/>
+        <field name="city">Medan</field>
+        <field name="user_id" ref="user_sales_andi"/>
+    </record>
+    <record id="partner_reseller_bangun" model="res.partner">
+        <field name="name">CV Bangun Interior</field>
+        <field name="is_company" eval="True"/>
+        <field name="is_reseller" eval="True"/>
+        <field name="city">Binjai</field>
+        <field name="user_id" ref="user_sales_budi"/>
+    </record>
+    <record id="partner_reseller_griya" model="res.partner">
+        <field name="name">PT Griya Kontraktor</field>
+        <field name="is_company" eval="True"/>
+        <field name="is_reseller" eval="True"/>
+        <field name="city">Medan</field>
+        <field name="user_id" ref="user_sales_andi"/>
+    </record>
+    <record id="partner_customer_sari" model="res.partner">
+        <field name="name">Ibu Sari (end customer)</field>
+        <field name="city">Medan</field>
+    </record>
+</odoo>

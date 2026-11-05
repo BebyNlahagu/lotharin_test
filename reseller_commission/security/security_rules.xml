@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Multi-company (global rules) -->
+    <record id="rule_commission_company" model="ir.rule">
+        <field name="name">Reseller Commission: multi-company</field>
+        <field name="model_id" ref="model_reseller_commission"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_commission_line_company" model="ir.rule">
+        <field name="name">Reseller Commission Line: multi-company</field>
+        <field name="model_id" ref="model_reseller_commission_line"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_commission_tier_company" model="ir.rule">
+        <field name="name">Reseller Commission Tier: multi-company</field>
+        <field name="model_id" ref="model_reseller_commission_tier"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Salesperson: only commissions of the resellers they own (partner "Salesperson") -->
+    <record id="rule_commission_salesperson" model="ir.rule">
+        <field name="name">Reseller Commission: salesperson sees own resellers</field>
+        <field name="model_id" ref="model_reseller_commission"/>
+        <field name="groups" eval="[(4, ref('group_commission_user'))]"/>
+        <field name="domain_force">[('reseller_id.user_id', '=', user.id)]</field>
+    </record>
+    <record id="rule_commission_line_salesperson" model="ir.rule">
+        <field name="name">Reseller Commission Line: salesperson sees own resellers</field>
+        <field name="model_id" ref="model_reseller_commission_line"/>
+        <field name="groups" eval="[(4, ref('group_commission_user'))]"/>
+        <field name="domain_force">[('commission_id.reseller_id.user_id', '=', user.id)]</field>
+    </record>
+
+    <!-- Manager and accounting: everything (rules of a user's groups are OR-ed) -->
+    <record id="rule_commission_all" model="ir.rule">
+        <field name="name">Reseller Commission: manager/accounting see all</field>
+        <field name="model_id" ref="model_reseller_commission"/>
+        <field name="groups" eval="[(4, ref('group_commission_manager')), (4, ref('group_commission_accountant'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_commission_line_all" model="ir.rule">
+        <field name="name">Reseller Commission Line: manager/accounting see all</field>
+        <field name="model_id" ref="model_reseller_commission_line"/>
+        <field name="groups" eval="[(4, ref('group_commission_manager')), (4, ref('group_commission_accountant'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+    <!-- Partners: a commission salesperson only sees resellers they own (other contacts are unaffected) -->
+    <record id="rule_partner_reseller_salesperson" model="ir.rule">
+        <field name="name">Reseller Commission: salesperson sees only own resellers (contacts)</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="groups" eval="[(4, ref('group_commission_user'))]"/>
+        <field name="domain_force">['|', ('is_reseller', '=', False), ('user_id', '=', user.id)]</field>
+    </record>
+    <record id="rule_partner_reseller_all" model="ir.rule">
+        <field name="name">Reseller Commission: manager/accounting see all contacts</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="groups" eval="[(4, ref('group_commission_manager')), (4, ref('group_commission_accountant'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+</odoo>

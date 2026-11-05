@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Not noupdate: re-running is safe, the loader skips invoices that already exist. -->
+    <function model="reseller.commission.demo.loader" name="load"/>
+</odoo>

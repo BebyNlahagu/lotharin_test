@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_reseller_commission_root" name="Reseller Commission" sequence="40"
+              groups="reseller_commission.group_commission_user"/>
+    <menuitem id="menu_reseller_commission" name="Commissions" parent="menu_reseller_commission_root"
+              action="reseller_commission_action" sequence="10"/>
+    <menuitem id="menu_reseller_commission_resellers" name="Resellers" parent="menu_reseller_commission_root"
+              action="reseller_commission_reseller_action" sequence="15"/>
+    <menuitem id="menu_reseller_commission_generate" name="Generate Commissions"
+              parent="menu_reseller_commission_root" action="reseller_commission_generate_wizard_action"
+              sequence="20" groups="reseller_commission.group_commission_manager, reseller_commission.group_commission_accountant"/>
+    <menuitem id="menu_reseller_commission_analysis" name="Commission Summary"
+              parent="menu_reseller_commission_root" action="reseller_commission_analysis_action" sequence="30"/>
+    <menuitem id="menu_reseller_commission_config" name="Configuration"
+              parent="menu_reseller_commission_root" sequence="90"
+              groups="reseller_commission.group_commission_manager"/>
+    <menuitem id="menu_reseller_commission_tier" name="Commission Tiers"
+              parent="menu_reseller_commission_config" action="reseller_commission_tier_action" sequence="10"/>
+</odoo>

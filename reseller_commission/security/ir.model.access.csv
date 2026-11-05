@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_reseller_commission_tier_user,reseller.commission.tier user,model_reseller_commission_tier,group_commission_user,1,0,0,0
+access_reseller_commission_tier_manager,reseller.commission.tier manager,model_reseller_commission_tier,group_commission_manager,1,1,1,1
+access_reseller_commission_user,reseller.commission user,model_reseller_commission,group_commission_user,1,0,0,0
+access_reseller_commission_manager,reseller.commission manager,model_reseller_commission,group_commission_manager,1,1,1,1
+access_reseller_commission_accountant,reseller.commission accountant,model_reseller_commission,group_commission_accountant,1,1,1,1
+access_reseller_commission_line_user,reseller.commission.line user,model_reseller_commission_line,group_commission_user,1,0,0,0
+access_reseller_commission_line_manager,reseller.commission.line manager,model_reseller_commission_line,group_commission_manager,1,1,1,1
+access_reseller_commission_line_accountant,reseller.commission.line accountant,model_reseller_commission_line,group_commission_accountant,1,1,1,1

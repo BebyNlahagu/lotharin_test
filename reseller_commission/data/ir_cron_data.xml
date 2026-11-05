@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- noupdate: the client may change the schedule or deactivate the job. -->
+<odoo noupdate="1">
+    <record id="ir_cron_generate_commission" model="ir.cron">
+        <field name="name">Reseller Commission: generate previous month</field>
+        <field name="model_id" ref="model_reseller_commission"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_generate_previous_month()</field>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">1</field>
+        <field name="interval_type">months</field>
+        <field name="nextcall" eval="(DateTime.now().replace(day=1, hour=1, minute=0, second=0) + relativedelta(months=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        <field name="active" eval="True"/>
+    </record>
+</odoo>

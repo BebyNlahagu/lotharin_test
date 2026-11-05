@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_discount_approval" model="ir.ui.view">
+        <field name="name">sale.order.form.discount.approval</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_confirm'][1]" position="before">
+                <button name="action_request_approval" type="object" string="Request Approval"
+                        class="btn-primary"
+                        invisible="state not in ('draft', 'sent') or not need_discount_approval or approval_state in ('to_approve', 'approved')"/>
+                <button name="action_approve_discount" type="object" string="Approve Discount"
+                        class="btn-success"
+                        groups="sale_discount_approval.group_discount_approver"
+                        invisible="state not in ('draft', 'sent') or approval_state != 'to_approve'"/>
+                <button name="action_reject_discount" type="object" string="Reject Discount"
+                        class="btn-danger"
+                        groups="sale_discount_approval.group_discount_approver"
+                        invisible="state not in ('draft', 'sent') or approval_state != 'to_approve'"/>
+            </xpath>
+            <xpath expr="(//button[@name='action_confirm'])[1]" position="attributes">
+                <attribute name="invisible" add="(need_discount_approval and approval_state != 'approved')" separator=" or "/>
+            </xpath>
+            <xpath expr="(//button[@name='action_confirm'])[2]" position="attributes">
+                <attribute name="invisible" add="(need_discount_approval and approval_state != 'approved')" separator=" or "/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/list/field[@name='discount']" position="attributes">
+                <attribute name="readonly">parent.approval_state == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//sheet" position="before">
+                <div class="alert alert-warning" role="alert"
+                     invisible="state not in ('draft', 'sent') or not need_discount_approval or approval_state == 'approved'">
+                    Highest discount 
+                    <strong>
+                        <field name="max_discount" class="oe_inline"/>%
+                    </strong>
+                    has been reached. This order requires approval before it can be confirmed.
+                
+                </div>
+            </xpath>
+            <xpath expr="//group[@name='order_details']" position="inside">
+                <field name="need_discount_approval" invisible="1"/>
+                <field name="approval_state" invisible="not need_discount_approval and approval_state == 'draft'"/>
+                <field name="approved_by_id" invisible="approval_state != 'approved'"/>
+                <field name="approval_date" invisible="approval_state != 'approved'"/>
+            </xpath></field>
+    </record>
+</odoo>

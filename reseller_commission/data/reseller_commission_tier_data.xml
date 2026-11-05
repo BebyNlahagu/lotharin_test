@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Default tiers of CV Mitra Karya Nusantara. noupdate: the client edits these in the UI
+     and an upgrade must never overwrite their values. -->
+<odoo noupdate="1">
+    <record id="commission_tier_1" model="reseller.commission.tier">
+        <field name="name">Tier 1 - below Rp 50 million</field>
+        <field name="min_amount">0</field>
+        <field name="rate">3.0</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="commission_tier_2" model="reseller.commission.tier">
+        <field name="name">Tier 2 - Rp 50 to 150 million</field>
+        <field name="min_amount">50000000</field>
+        <field name="rate">5.0</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="commission_tier_3" model="reseller.commission.tier">
+        <field name="name">Tier 3 - above Rp 150 million</field>
+        <field name="min_amount">150000000</field>
+        <field name="rate">7.0</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+</odoo>
